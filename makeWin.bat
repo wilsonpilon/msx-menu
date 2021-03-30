@@ -18,9 +18,9 @@ rem          Tools: Diretorio que contem ferramentas necessarias para
 rem                 a compilacao e criacao dos discos
 rem          Build: Diretorio de destino dos arquivos compilados e 
 rem                 imagem de disco
-set SourceFile=program
-set DiskName=program.dsk
-set COMname=program
+set SourceFile=menu
+set DiskName=menu.dsk
+set COMname=menu
 set MakeAutoexec=true
 set MakeDOS=true
 set MakeBAD=false
@@ -80,6 +80,7 @@ echo %token% %Source%\%SourceFile%.bad
 %token% %Source%\%SourceFile%.bad | %Tools%\%Grep% > %Source%\error.txt
 timeout 1 > nul
 
+goto :eof
 
 if [%MakeBAD%] == [true] (
 	echo  %date%-%time%-[auxiliar]: Compilando BAD Auxiliares
