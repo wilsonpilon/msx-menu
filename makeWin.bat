@@ -66,8 +66,6 @@ set BADaux=
 set ASMaux=
 set ALFaux=
 
-cls
-
 echo %date%-%time%-[definicoes]: Variaveis de Projeto Configuradas
 
 rem ===== Preparacao
@@ -79,8 +77,6 @@ echo %date%-%time% - make: Compiling BAS file
 echo %token% %Source%\%SourceFile%.bad
 %token% %Source%\%SourceFile%.bad | %Tools%\%Grep% > %Source%\error.txt
 timeout 1 > nul
-
-goto :eof
 
 if [%MakeBAD%] == [true] (
 	echo  %date%-%time%-[auxiliar]: Compilando BAD Auxiliares

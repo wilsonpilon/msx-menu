@@ -2,53 +2,21 @@
 ## * Programa de inicializacao do projeto BASPRO: CPU
 ## * cria um menu em SCREEN IV com a relacao de todos os programas disponiveis
 ## *
+include "basic.bad"
 
 
 ## ***** Declaracoes de Variaveis usadas pelo programa ***********************
-declare contadori, contadore, temp, auxiliar, tecla
 declare cursor, topomenu, opcoes, comando, descricao, parametro, extensao
 declare maxopcao, bottonmenu, limite, help
 
 ## ***** Definicoes/Macros usadas pelo programa ******************************
-define [waitkey] [aa$=inkey$:if aa$="" then {@}]
-define [clrbuffer] [aa$=inkey$:if aa$<>"" then {@}]
-define [debug][locate 0,4:print "debug: ";[0]:aa$=input$(1)]
 define [endbasic][&HBFFF]
 define [stringspace][2000]
-define [asmfile]["program.bin"]
-define [blkx][poke &Hc000,[0]]
-define [blky][poke &Hc001,[0]]
-define [blkw][poke &Hc002,[0]]
-define [blkh][poke &Hc003,[0]]
-define [blkc][poke &Hc004,[0]]
-define [slen][poke &hc005,[0]]
-define [lalfa][peek (&Hc000)]
-define [halfa][peek (&Hc001)]
-define [lralfa][&HBF]
-define [hralfa][&H1B]
-define [SCRNIV][temp=usr(0)]
-define [CPALPH][temp=usr(1)]
-define [DSKTOP][temp=usr(2)]
-define [COLORS][temp=usr(3)]
-define [FBLOK][temp=usr(4)]
-define [WINDS][temp$=usr3([0])]
-define [cESC][if asc(aa$) = 27 then]
-define [cENTER][if asc(aa$) = 13 then]
-define [cDOWN][if asc(aa$) = 31 then]
-define [cUP][if asc(aa$) = 30 then]
+define [asmfile]["menu.bin"]
 
-## ***** Programa Principal **************************************************
-goto {carrega_fonte}
-{main}
-    defint a-z:
-    gosub {desktop}:
-    gosub {carrega_menu}:
-    gosub {carrega_help}:
-    gosub {show_menu}:
-    gosub {menu}:
-    gosub {descarrega_fonte}:
-    end
-{teste}
+include "fonte.bad"
+include "screen4.bad"
+include "main.bad"
 
 
 
@@ -115,33 +83,6 @@ goto {carrega_fonte}
     return
 
 
-## ***** Carrega a Fonte em Disco, formato Graphos III **********************
-## * Esta rotina carrega um alfabeto do Graphos III para a RAM e o usa como
-## * novo banco de caracteres, permitindo inclusive a troca de SCREEN sem
-## * perda da definicao. So funciona em MSX-DOS
-## * &H3A00: A fonte do graphos fica em #9200, porem nosso programa a usa em
-## *         #CC00, por isso precisamos carregar a mesma com este offset
-## * &HF91F: SlotID onde a nova fonte vai ser instalada (RAM), busca o dado
-## *         na area de systema do MSX-DOS (RAM Page 2 DOS/BASIC)
-## * &HF920: Endereco do banco de caracteres, em nosso caso &HCC00
-## *
-{carrega_fonte}
-    clear 2000, &Hbfff:
-    bload [asmfile], r:
-    poke &Hf91f, peek(&hf341+3):
-    poke &Hf920, [lalfa]:
-    poke &Hf921, [halfa]:
-    goto {main}
-
-{descarrega_fonte}
-    poke &Hf91f, 0:
-    poke &Hf920, [lralfa]:
-    poke &Hf921, [hralfa]:
-    screen 0:
-    width 40:
-    key off:
-    color 15,1,1:
-    return
 
 
 ## ***** Carrega as opcoes e prepara o menu ajustando a quantidade de itens **
@@ -203,36 +144,6 @@ goto {carrega_fonte}
     return
 
 
-## ***** DESKTOP, pinta a Area de Desktop Inicial ****************************
-## * Usa a rotina em Assembly SCRNIV / USR(0)
-## * Colca o VDP em SCREEN 2 e o sistema em SCREEN 1, fazendo o modo
-## * mixado entre a SCREEN 1 e 2, permitindo 16 cores por caractere nas
-## * caracteristicas da SCREEN 1 em modo texto e nao grafico
-## *
-## * Usa a rotina em Assembly CPALPH / USR(1)
-## * Chama a SCREEN 2 para preparar as tabelas na VRAM. Em seguida faz o
-## * mesmo com a SCREEN 1. Depois chama a rotina SETGRP da BIOS. Esta
-## * rotina muda o VDP para operar no formato da SCREEN 1, porem deixando
-## * o BASIC em SCREEN 1. Para funcionar corretamente precisa que se copie
-## * o banco de caracteres para os 3 tercos da tela, a partir disso, opera
-## * como SCREEN 1
-## *
-## * Usa rotina em Assembly DSKTOP / USR(2)
-## * E apenas uma chamada a FILVRM com o caractere 0, que e o padrao de
-## * preenchimento no alfabeto
-## *
-## * Usa a rotina em Assembly FBLOK / USR(4)
-## * Preenche um bloco nao contiguo na VRAM com um caractere
-{desktop}
-    [SCRNIV]:
-    [CPALPH]:
-    [blkc]&H00:[DSKTOP]:
-    [COLORS]:
-    [blkx]1:[blky]2:[blkw]11:[blkh]20:[blkc]32:[FBLOK]:
-    [blkx]13:[blky]2:[blkw]18:[blkh]20:[blkc]32:[FBLOK]
-    [blkx]1:[blky]2:[blkw]11:[blkh]20:[blkc]32:[WINDS]"Menu":
-    [blkx]13:[blky]2:[blkw]18:[blkh]20:[blkc]32:[WINDS]"Info":
-    return
 
 
 
@@ -394,3 +305,4 @@ goto {carrega_fonte}
         help$(17,16)  = "e determinam as ":
         help$(17,17)  = "influencias.    "
     return
+

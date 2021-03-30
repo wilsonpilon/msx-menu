@@ -1,1 +1,1 @@
-10 run "program.bas" 
+10 run "menu.bas" 
