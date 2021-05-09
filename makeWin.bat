@@ -26,7 +26,7 @@ set MakeDOS=true
 set MakeBAD=false
 set MakeASM=false
 set MakeALF=false
-set emulPath=C:\users\barney\temp\msx\openmsx\openmsx.exe
+set emulPath=C:\Users\barney\System\msx\openmsx\openmsx.exe
 set emulArgs=-machine Gradiente_Expert_GPC-1 -ext Sharp_HB-3600 -script program.tcl -diskb diskb/
 set Source=source
 set Tools=bin
@@ -45,7 +45,7 @@ rem         Tunix: caminho da ferramenta de conversao DOS -> UNIX
 rem  CopyToFloppy: Comando para criacao e adicao de arquivos a imagem
 rem set compile=%Tools%\pasmo.exe
 set compile=%Tools%\asmsx.exe
-set python=python
+set python=C:\Users\barney\System\anaconda\python
 set disktool=%Tools%\DskTool.exe
 set Tdos=%Tools%\unix2dos.exe
 set Tunix=%Tools%\dos2unix.exe
